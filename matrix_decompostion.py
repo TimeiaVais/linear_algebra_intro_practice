@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.linalg import lu, qr, det, eig, svd
 
 
 def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -12,7 +13,8 @@ def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]
         tuple[np.ndarray, np.ndarray, np.ndarray]:
             The permutation matrix P, lower triangular matrix L, and upper triangular matrix U.
     """
-    raise NotImplementedError
+    P, L, U = lu(x)
+    return P, L, U
 
 
 def qr_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -25,7 +27,8 @@ def qr_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray]: The orthogonal matrix Q and upper triangular matrix R.
     """
-    raise NotImplementedError
+    Q, R = qr(x)
+    return Q, R
 
 
 def determinant(x: np.ndarray) -> np.ndarray:
@@ -38,7 +41,7 @@ def determinant(x: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: The determinant of the matrix.
     """
-    raise NotImplementedError
+    return det(x)
 
 
 def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -51,7 +54,8 @@ def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray]: The eigenvalues and the right eigenvectors of the matrix.
     """
-    raise NotImplementedError
+    values, vectors = eig(x)
+    return values, vectors
 
 
 def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -64,4 +68,5 @@ def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray]: The matrices U, S, and V.
     """
-    raise NotImplementedError
+    U, S, Vh = svd(x)
+    return U, S, Vh
