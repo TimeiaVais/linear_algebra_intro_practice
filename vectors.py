@@ -1,147 +1,80 @@
 from typing import Sequence
-
 import numpy as np
 from scipy import sparse
+from numpy.linalg import norm as np_norm, solve
 
 
 def get_vector(dim: int) -> np.ndarray:
-    """Create random column vector with dimension dim.
-
-    Args:
-        dim (int): vector dimension.
-
-    Returns:
-        np.ndarray: column vector.
-    """
-    raise NotImplementedError
+    return np.random.rand(dim, 1)
 
 
-def get_sparse_vector(dim: int) -> sparse.coo_matrix:
-    """Create random sparse column vector with dimension dim.
-
-    Args:
-        dim (int): vector dimension.
-
-    Returns:
-        sparse.coo_matrix: sparse column vector.
-    """
-    raise NotImplementedError
+def get_sparse_vector(dim: int, density: float = 0.1) -> sparse.coo_matrix:
+    dense_vec = sparse.random(dim, 1, density=density, format="coo", dtype=float)
+    return dense_vec
 
 
 def add(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Vector addition. 
-
-    Args:
-        x (np.ndarray): 1th vector.
-        y (np.ndarray): 2nd vector.
-
-    Returns:
-        np.ndarray: vector sum.
-    """
-    raise NotImplementedError
+    return np.add(x, y)
 
 
 def scalar_multiplication(x: np.ndarray, a: float) -> np.ndarray:
-    """Vector multiplication by scalar.
-
-    Args:
-        x (np.ndarray): vector.
-        a (float): scalar.
-
-    Returns:
-        np.ndarray: multiplied vector.
-    """
-    raise NotImplementedError
+    return a * x
 
 
 def linear_combination(vectors: Sequence[np.ndarray], coeffs: Sequence[float]) -> np.ndarray:
-    """Linear combination of vectors.
-
-    Args:
-        vectors (Sequence[np.ndarray]): list of vectors of len N.
-        coeffs (Sequence[float]): list of coefficients of len N.
-
-    Returns:
-        np.ndarray: linear combination of vectors.
-    """
-    raise NotImplementedError
+    if len(vectors) != len(coeffs):
+        raise ValueError("Number of vectors and coefficients must match.")
+    result = np.zeros_like(vectors[0])
+    for v, c in zip(vectors, coeffs):
+        result += c * v
+    return result
 
 
 def dot_product(x: np.ndarray, y: np.ndarray) -> float:
-    """Vectors dot product.
-
-    Args:
-        x (np.ndarray): 1th vector.
-        y (np.ndarray): 2nd vector.
-
-    Returns:
-        float: dot product.
-    """
-    raise NotImplementedError
+    return float(np.dot(x.ravel(), y.ravel()))
 
 
-def norm(x: np.ndarray, order: int | float) -> float:
-    """Vector norm: Manhattan, Euclidean or Max.
-
-    Args:
-        x (np.ndarray): vector
-        order (int | float): norm's order: 1, 2 or inf.
-
-    Returns:
-        float: vector norm
-    """
-    raise NotImplementedError
+def norm(x: np.ndarray, order: int | float = 2) -> float:
+    return float(np_norm(x, ord=order))
 
 
 def distance(x: np.ndarray, y: np.ndarray) -> float:
-    """L2 distance between vectors.
-
-    Args:
-        x (np.ndarray): 1th vector.
-        y (np.ndarray): 2nd vector.
-
-    Returns:
-        float: distance.
-    """
-    raise NotImplementedError
+    return float(np_norm(x - y))
 
 
 def cos_between_vectors(x: np.ndarray, y: np.ndarray) -> float:
-    """Cosine between vectors in deg.
-
-    Args:
-        x (np.ndarray): 1th vector.
-        y (np.ndarray): 2nd vector.
-
-
-    Returns:
-        np.ndarray: angle in deg.
-    """
-    raise NotImplementedError
+    dot = dot_product(x, y)
+    norms = norm(x, 2) * norm(y, 2)
+    if norms == 0:
+        raise ValueError("Zero vector provided.")
+    cos_theta = np.clip(dot / norms, -1.0, 1.0)
+    theta_rad = np.arccos(cos_theta)
+    return float(np.degrees(theta_rad))
 
 
-def is_orthogonal(x: np.ndarray, y: np.ndarray) -> bool:
-    """Check is vectors orthogonal.
-
-    Args:
-        x (np.ndarray): 1th vector.
-        y (np.ndarray): 2nd vector.
-
-
-    Returns:
-        bool: are vectors orthogonal.
-    """
-    raise NotImplementedError
+def is_orthogonal(x: np.ndarray, y: np.ndarray, tol: float = 1e-10) -> bool:
+    return abs(dot_product(x, y)) < tol
 
 
 def solves_linear_systems(a: np.ndarray, b: np.ndarray) -> np.ndarray:
-    """Solve system of linear equations.
+    return solve(a, b)
 
-    Args:
-        a (np.ndarray): coefficient matrix.
-        b (np.ndarray): ordinate values.
 
-    Returns:
-        np.ndarray: sytems solution
-    """
-    raise NotImplementedError
+# Example usage
+if __name__ == "__main__":
+    v1 = get_vector(3)
+    v2 = get_vector(3)
+
+    print("Vector v1:\n", v1)
+    print("Vector v2:\n", v2)
+    print("Addition:\n", add(v1, v2))
+    print("Scalar multiplication:\n", scalar_multiplication(v1, 2))
+    print("Dot product:", dot_product(v1, v2))
+    print("Norm v1:", norm(v1, 2))
+    print("Distance:", distance(v1, v2))
+    print("Cosine angle (deg):", cos_between_vectors(v1, v2))
+    print("Orthogonal?", is_orthogonal(v1, v2))
+
+    A = np.array([[2, 1], [1, 3]], dtype=float)
+    b = np.array([8, 13], dtype=float)
+    print("Solution of Ax=b:", solves_linear_systems(A, b))
