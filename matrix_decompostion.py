@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.linalg import lu, qr, det, eig, svd
+from scipy.linalg import lu
 
 
 def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -27,7 +27,7 @@ def qr_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray]: The orthogonal matrix Q and upper triangular matrix R.
     """
-    Q, R = qr(x)
+    Q, R = np.linalg.qr(x)
     return Q, R
 
 
@@ -41,7 +41,7 @@ def determinant(x: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: The determinant of the matrix.
     """
-    return det(x)
+    return np.linalg.det(x)
 
 
 def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -68,5 +68,5 @@ def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray]: The matrices U, S, and V.
     """
-    U, S, Vh = svd(x)
-    return U, S, Vh
+    U, S, V = svd(x)
+    return U, S, V
