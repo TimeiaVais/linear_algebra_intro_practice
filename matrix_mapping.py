@@ -46,30 +46,14 @@ def affine_transform(
     Returns:
         np.ndarray: transformed matrix.
     """
-    if x.ndim == 1:
-        x = x.reshape(1, 2)
-
-    assert x.shape[1] == 2, "Affine transform supports only 2D points"
-
     alpha = np.deg2rad(alpha_deg)
+    R = np.array([[np.cos(alpha), -np.sin(alpha)],
+                  [np.sin(alpha),  np.cos(alpha)]])
 
-     M = np.array([
-        [scale[0]*np.cos(alpha) + shear[0]*np.sin(alpha),
-         -np.sin(alpha)*scale[1] + shear[0]*np.cos(alpha)],
-        [np.sin(alpha)*scale[0] + shear[1]*np.sin(alpha),
-         np.cos(alpha)*scale[1] + shear[1]*np.cos(alpha)]
-    ])
+    S = np.array([[scale[0], 0], [0, scale[1]]])
+    Sh = np.array([[1, shear[0]], [shear[1], 1]])
 
-     transformed = []
+    A = R @ Sh @ S
+    transformed = (A @ x.T).T + np.array(translate)
 
-     for point in x:
-        new_point = scipy_affine_transform(
-            input=point,          
-            matrix=M,             
-            offset=translate,     
-            output_shape=(2,),    
-            order=1               
-        )
-        transformed.append(new_point)
-
-    return np.array(transformed)
+    return transformed
