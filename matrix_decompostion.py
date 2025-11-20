@@ -54,7 +54,7 @@ def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray]: The eigenvalues and the right eigenvectors of the matrix.
     """
-    values, vectors = eig(x)
+    values, vectors = np.linalg.eig(x)
     return values, vectors
 
 
@@ -68,5 +68,5 @@ def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray]: The matrices U, S, and V.
     """
-    U, S, V = svd(x)
+    U, S, V = np.linalg.svd(x)
     return U, S, V
