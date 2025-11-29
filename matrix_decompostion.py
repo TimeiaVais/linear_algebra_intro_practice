@@ -1,6 +1,5 @@
 import numpy as np
-from scipy.linalg import lu
-
+from scipy.linalg import lu, qr
 
 def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
@@ -27,7 +26,7 @@ def qr_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray]: The orthogonal matrix Q and upper triangular matrix R.
     """
-    Q, R = np.linalg.qr(x)
+    Q, R = qr(x)
     return Q, R
 
 
@@ -43,7 +42,6 @@ def determinant(x: np.ndarray) -> np.ndarray:
     """
     return np.linalg.det(x)
 
-
 def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """
     Compute the eigenvalues and right eigenvectors of a matrix.
@@ -57,7 +55,6 @@ def eigen(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     values, vectors = np.linalg.eig(x)
     return values, vectors
 
-
 def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Perform Singular Value Decomposition (SVD) of a matrix.
@@ -68,5 +65,5 @@ def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray]: The matrices U, S, and V.
     """
-    U, S, V = np.linalg.svd(x)
-    return U, S, V
+    U, S, Vh = np.linalg.svd(x, full_matrices=True)
+    return U, S, Vh
