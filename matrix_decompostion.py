@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.linalg import lu
+from scipy import linalg
 
 def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
@@ -12,7 +12,7 @@ def lu_decomposition(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]
         tuple[np.ndarray, np.ndarray, np.ndarray]:
             The permutation matrix P, lower triangular matrix L, and upper triangular matrix U.
     """
-    P, L, U = lu(x)
+    P, L, U = linalg.lu(x)
     return P, L, U
 
 
@@ -65,7 +65,7 @@ def svd(x: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     Returns:
         tuple[np.ndarray, np.ndarray, np.ndarray]: The matrices U, S, and V.
     """
-    U, S, Vh = np.linalg.svd(x, full_matrices=True)
+    U, S, Vh = np.linalg.svd(x)
     return U, S, Vh
 
 
